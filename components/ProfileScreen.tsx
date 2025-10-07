@@ -11,7 +11,7 @@ interface ProfileScreenProps {
 }
 
 const MenuItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () => void; }> = ({ icon, label, onClick }) => (
-    <button onClick={onClick} className="flex items-center w-full p-4 bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors">
+    <button onClick={onClick} className="flex items-center w-full p-4 bg-slate-900/50 hover:bg-slate-800/50 rounded-lg transition-colors">
         {icon}
         <span className="ml-4 text-slate-200 font-medium">{label}</span>
     </button>
@@ -19,9 +19,9 @@ const MenuItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () =>
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({ employee, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-slate-950 z-50 flex flex-col animate-fade-in">
+    <div className="fixed inset-0 bg-transparent z-50 flex flex-col animate-fade-in">
       <header className="w-full max-w-md mx-auto px-4 pt-6 pb-4 flex items-center">
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
+        <button onClick={onClose} className="p-2 rounded-full hover:bg-slate-800/50 transition-colors">
             <ChevronLeftIcon className="w-7 h-7 text-slate-400" />
         </button>
         <h1 className="text-xl font-bold text-slate-100 mx-auto">Profile</h1>
@@ -39,8 +39,8 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ employee, onClose }) => {
             <p className="text-slate-400 font-mono text-sm">{employee.id}</p>
         </div>
 
-        <div className="bg-slate-900 rounded-xl p-6 mb-8 text-sm">
-            <div className="flex justify-between py-3 border-b border-slate-800">
+        <div className="bg-slate-900/50 rounded-xl p-6 mb-8 text-sm">
+            <div className="flex justify-between py-3 border-b border-slate-800/50">
                 <span className="text-slate-400">Department</span>
                 <span className="font-medium text-slate-200">{employee.department}</span>
             </div>

@@ -15,7 +15,17 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-family: 'Inter', sans-serif;
+      background: linear-gradient(-45deg, #1e1b4b, #312e81, #1e293b, #0f172a);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
     }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     #qr-code-reader-region::before,
     #qr-code-reader-region::after,
     #qr-code-reader-region > div::before,
@@ -70,7 +80,7 @@
 }
 </script>
 </head>
-<body class="bg-slate-950">
+<body>
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

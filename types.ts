@@ -8,6 +8,7 @@ export enum AppView {
 export enum ScannerState {
   IDLE,
   SCANNING,
+  PROCESSING,
   SUCCESS,
   ERROR,
 }

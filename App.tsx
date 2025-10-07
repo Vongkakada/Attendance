@@ -28,42 +28,44 @@ const App: React.FC = () => {
   }, []);
 
   const handleScanSuccess = useCallback((decodedText: string) => {
-    try {
-      const data = JSON.parse(decodedText);
-      if (data.employeeId && data.name && mockEmployee.id === data.employeeId) {
-        const now = new Date();
-        const newLog: AttendanceLog = {
-          employee: {
-            id: data.employeeId,
-            name: data.name,
-            avatarUrl: `https://i.pravatar.cc/150?u=${data.employeeId}`,
-            position: mockEmployee.position,
-            department: mockEmployee.department
-          },
-          date: now.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
-          time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-        };
-        
-        setLastAttendanceLog(newLog);
+    setScannerState(ScannerState.PROCESSING);
 
-        if (!todaysAttendance?.checkIn) {
-            // This is a Check In
-            setTodaysAttendance({ checkIn: newLog, checkOut: null });
-            setLastScanType('Check In');
-        } else if (!todaysAttendance?.checkOut) {
-            // This is a Check Out
-            setTodaysAttendance({ ...todaysAttendance, checkOut: newLog });
-            setLastScanType('Check Out');
+    // Simulate network/validation delay
+    setTimeout(() => {
+      try {
+        const data = JSON.parse(decodedText);
+        if (data.employeeId && data.name && mockEmployee.id === data.employeeId) {
+          const now = new Date();
+          const newLog: AttendanceLog = {
+            employee: {
+              id: data.employeeId,
+              name: data.name,
+              avatarUrl: `https://i.pravatar.cc/150?u=${data.employeeId}`,
+              position: mockEmployee.position,
+              department: mockEmployee.department
+            },
+            date: now.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+            time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+          };
+          
+          setLastAttendanceLog(newLog);
+
+          if (!todaysAttendance?.checkIn) {
+              setTodaysAttendance({ checkIn: newLog, checkOut: null });
+              setLastScanType('Check In');
+          } else if (!todaysAttendance?.checkOut) {
+              setTodaysAttendance({ ...todaysAttendance, checkOut: newLog });
+              setLastScanType('Check Out');
+          }
+          
+          setScannerState(ScannerState.SUCCESS);
+        } else {
+          throw new Error("Invalid employee QR code.");
         }
-        // If both exist, we don't do anything, the button should be disabled.
-        
-        setScannerState(ScannerState.SUCCESS);
-      } else {
-        throw new Error("Invalid employee QR code.");
+      } catch (error) {
+        handleScanError('Please use a valid QR code to mark your attendance.');
       }
-    } catch (error) {
-      handleScanError('Please use a valid QR code to mark your attendance.');
-    }
+    }, 1500); // 1.5 second delay
   }, [todaysAttendance]);
 
   const handleScanError = useCallback((message: string) => {
@@ -72,11 +74,14 @@ const App: React.FC = () => {
   }, []);
 
   const resetScanner = useCallback(() => {
-    setLastAttendanceLog(null);
-    setLastScanType(null);
+    // Keep last log for success screen, but reset for new scan
+    if (scannerState !== ScannerState.SUCCESS) {
+        setLastAttendanceLog(null);
+        setLastScanType(null);
+    }
     setErrorMessage('');
     setScannerState(ScannerState.IDLE);
-  }, []);
+  }, [scannerState]);
   
   const handleProfileOpen = () => setIsProfileOpen(true);
   const handleProfileClose = () => setIsProfileOpen(false);
@@ -98,7 +103,8 @@ const App: React.FC = () => {
   const renderScannerModal = () => {
     switch(scannerState) {
       case ScannerState.SCANNING:
-        return <ScannerScreen onScanSuccess={handleScanSuccess} onScanError={handleScanError} onCancel={resetScanner} />;
+      case ScannerState.PROCESSING:
+        return <ScannerScreen state={scannerState} onScanSuccess={handleScanSuccess} onScanError={handleScanError} onCancel={resetScanner} />;
       case ScannerState.SUCCESS:
         return lastAttendanceLog && lastScanType ? <SuccessScreen attendanceLog={lastAttendanceLog} scanType={lastScanType} onDone={resetScanner} /> : null;
       case ScannerState.ERROR:
@@ -110,7 +116,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+    <div className="min-h-screen bg-transparent text-white flex flex-col">
       <Header onProfileClick={handleProfileOpen} />
       <main className="flex-grow w-full max-w-md mx-auto px-4 pb-24">
         {renderView()}

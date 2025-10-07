@@ -8,6 +8,7 @@ import { ArrowLeftOnRectangleIcon } from './icons/ArrowLeftOnRectangleIcon';
 interface ProfileScreenProps {
   employee: Employee;
   onClose: () => void;
+  onLogout: () => void;
 }
 
 const MenuItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () => void; }> = ({ icon, label, onClick }) => (
@@ -17,7 +18,7 @@ const MenuItem: React.FC<{ icon: React.ReactNode; label: string; onClick?: () =>
     </button>
 );
 
-const ProfileScreen: React.FC<ProfileScreenProps> = ({ employee, onClose }) => {
+const ProfileScreen: React.FC<ProfileScreenProps> = ({ employee, onClose, onLogout }) => {
   return (
     <div className="fixed inset-0 bg-transparent z-50 flex flex-col animate-fade-in">
       <header className="w-full max-w-md mx-auto px-4 pt-6 pb-4 flex items-center">
@@ -53,7 +54,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({ employee, onClose }) => {
         <div className="space-y-3">
             <MenuItem icon={<CogIcon className="w-6 h-6 text-slate-400" />} label="Settings" />
             <MenuItem icon={<QuestionMarkCircleIcon className="w-6 h-6 text-slate-400" />} label="Help Center" />
-            <MenuItem icon={<ArrowLeftOnRectangleIcon className="w-6 h-6 text-red-500" />} label="Logout" />
+            <MenuItem icon={<ArrowLeftOnRectangleIcon className="w-6 h-6 text-red-500" />} label="Logout" onClick={onLogout} />
         </div>
       </main>
     </div>

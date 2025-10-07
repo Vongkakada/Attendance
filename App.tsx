@@ -12,8 +12,10 @@ import SuccessScreen from './components/SuccessScreen';
 import ErrorScreen from './components/ErrorScreen';
 import Header from './components/Header';
 import ProfileScreen from './components/ProfileScreen';
+import LoginScreen from './components/LoginScreen';
 
 const App: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState<AppView>(AppView.DASHBOARD);
   const [scannerState, setScannerState] = useState<ScannerState>(ScannerState.IDLE);
   const [lastAttendanceLog, setLastAttendanceLog] = useState<AttendanceLog | null>(null);
@@ -74,7 +76,6 @@ const App: React.FC = () => {
   }, []);
 
   const resetScanner = useCallback(() => {
-    // Keep last log for success screen, but reset for new scan
     if (scannerState !== ScannerState.SUCCESS) {
         setLastAttendanceLog(null);
         setLastScanType(null);
@@ -85,6 +86,18 @@ const App: React.FC = () => {
   
   const handleProfileOpen = () => setIsProfileOpen(true);
   const handleProfileClose = () => setIsProfileOpen(false);
+  
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setIsProfileOpen(false);
+    setTodaysAttendance(null);
+    setCurrentView(AppView.DASHBOARD);
+  };
+
 
   const renderView = () => {
     switch (currentView) {
@@ -115,6 +128,10 @@ const App: React.FC = () => {
     }
   }
 
+  if (!isLoggedIn) {
+    return <LoginScreen onLogin={handleLogin} />;
+  }
+
   return (
     <div className="min-h-screen bg-transparent text-white flex flex-col">
       <Header onProfileClick={handleProfileOpen} />
@@ -123,7 +140,7 @@ const App: React.FC = () => {
       </main>
       <BottomNav currentView={currentView} setView={setCurrentView} />
       {renderScannerModal()}
-      {isProfileOpen && <ProfileScreen employee={mockEmployee} onClose={handleProfileClose} />}
+      {isProfileOpen && <ProfileScreen employee={mockEmployee} onClose={handleProfileClose} onLogout={handleLogout} />}
     </div>
   );
 };

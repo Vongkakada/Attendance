@@ -1,0 +1,7 @@
+{
+  "name": "Employee Attendance Scanner",
+  "description": "A web application for employees to scan a QR code and mark their attendance. It provides real-time feedback on the success or failure of the scan.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

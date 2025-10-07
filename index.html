@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Employee Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Inter', sans-serif;
+    }
+    #qr-code-reader-region::before,
+    #qr-code-reader-region::after,
+    #qr-code-reader-region > div::before,
+    #qr-code-reader-region > div::after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-style: solid;
+        border-color: #4f46e5; /* indigo-600 */
+        border-width: 0;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+    #qr-code-reader-region::before {
+        top: -2px; left: -2px;
+        border-top-width: 5px;
+        border-left-width: 5px;
+        animation-name: scanner-border-tl;
+    }
+    #qr-code-reader-region::after {
+        top: -2px; right: -2px;
+        border-top-width: 5px;
+        border-right-width: 5px;
+        animation-name: scanner-border-tr;
+    }
+    #qr-code-reader-region > div::before {
+        bottom: -2px; left: -2px;
+        border-bottom-width: 5px;
+        border-left-width: 5px;
+        animation-name: scanner-border-bl;
+    }
+    #qr-code-reader-region > div::after {
+        bottom: -2px; right: -2px;
+        border-bottom-width: 5px;
+        border-right-width: 5px;
+        animation-name: scanner-border-br;
+    }
+    @keyframes scanner-border-tl { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, 15px); } }
+    @keyframes scanner-border-tr { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-15px, 15px); } }
+    @keyframes scanner-border-bl { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, -15px); } }
+    @keyframes scanner-border-br { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(-15px, -15px); } }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+  }
+}
+</script>
+</head>
+<body class="bg-slate-950">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
